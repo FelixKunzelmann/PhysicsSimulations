@@ -1,0 +1,46 @@
+from qiskit import QuantumCircuit, transpile
+from qiskit_aer import AerSimulator
+from qiskit.visualization import plot_histogram
+import matplotlib.pyplot as plt
+
+# Create a quantum circuit with 5 qubits
+qc = QuantumCircuit(6, 6)
+
+# Initialize the qubits 0 and 1 in superposition |+> state
+for i in range(2):
+    qc.h(i)
+
+# Initialize the third qubit in superposition |-> state
+qc.x(2)
+qc.h(2)
+
+# Create entanglement via CNOT gates between neighbors
+
+qc.cx(0, 3)  # CNOT between qubit 0 and 3
+qc.cx(1, 4)  # CNOT between qubit 1 and 4
+qc.cx(2, 5)  # CNOT between qubit 2 and 5
+
+# Measure qubits and store the results in classical bits
+for i in range(0, 6):  # Measure qubits 0 to 5
+    qc.measure(i, i)
+
+
+# Draw the circuit
+print(qc.draw())
+
+# Simulate the circuit
+simulator = AerSimulator()
+compiled_circuit = transpile(qc, simulator)
+job = simulator.run(compiled_circuit, shots=1024)
+result = job.result()
+
+# Get the counts
+counts = result.get_counts()
+
+# Print the results
+print("Measurement results:")
+print(counts)
+
+# Plot the histogram
+plot_histogram(counts)
+plt.show()
