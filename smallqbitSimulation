@@ -1,6 +1,7 @@
 from qiskit import QuantumCircuit, transpile
 from qiskit_aer import AerSimulator
 from qiskit.visualization import plot_histogram
+from math import pi
 import matplotlib.pyplot as plt
 
 # Create a quantum circuit with 5 qubits
@@ -19,6 +20,15 @@ qc.h(2)
 qc.cx(0, 3)  # CNOT between qubit 0 and 3
 qc.cx(1, 4)  # CNOT between qubit 1 and 4
 qc.cx(2, 5)  # CNOT between qubit 2 and 5
+
+# Toffoli gate (controlled-controlled-X)
+# qc.ccx(0, 1, 2)  # Toffoli on qubits 0,1 controlling 2
+
+# Add phase rotations
+qc.rx(pi/4, 3)  # Phase rotation on qubit 3
+qc.ry(pi/3, 4)  # Phase rotation on qubit 4
+qc.rz(pi/2, 5)  # Phase rotation on qubit 5
+
 
 # Measure qubits and store the results in classical bits
 for i in range(0, 6):  # Measure qubits 0 to 5
